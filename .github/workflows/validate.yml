@@ -1,0 +1,21 @@
+# Every repo in the org extends default.json, so a broken preset stops Renovate everywhere.
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: renovate-config-validator
+        run: npx --yes --package renovate@44.198.2 -- renovate-config-validator --strict default.json org-inherited-config.json

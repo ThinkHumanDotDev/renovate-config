@@ -1,0 +1,8 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "description": "Read by the Mend Renovate app for every repo in the org. Only sets what an onboarding PR proposes: a renovate.json that extends default.json.",
+  "onboardingConfig": {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": ["local>ThinkHumanDotDev/renovate-config"]
+  }
+}
