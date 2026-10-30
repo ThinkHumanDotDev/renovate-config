@@ -12,7 +12,7 @@ root `renovate.json` that extends this preset and adds only its own rules:
 
 | File | Role |
 | --- | --- |
-| `default.json` | The preset: Mondays before 07:00 Europe/London, Dependency Dashboard on, `dependencies` label, plain commit subjects, no automerge unless a repo opts in. npm minor/patch in one weekly PR. Postgres majors as their own PR with a dump-and-reload warning. Reusable workflows from `ThinkHumanDotDev/infrastructure` (pinned to a SHA) move to its latest `main` in one PR. |
+| `default.json` | The preset: Mondays before 07:00 Europe/London, Dependency Dashboard on, `dependencies` label, plain commit subjects, no automerge unless a repo opts in. npm minor/patch in one weekly PR, Payload's packages in their own. Postgres majors as their own PR with a dump-and-reload warning. Reusable workflows from `ThinkHumanDotDev/infrastructure` (pinned to a SHA) move to its latest `main` in one PR. |
 | `org-inherited-config.json` | Read by the Mend Renovate app for every repo. It sets only the onboarding config, so an onboarding PR proposes the `renovate.json` above instead of Renovate's stock one. |
 
 Repos with Conventional Commits add `":semanticCommits"` after the preset. A change here reaches
