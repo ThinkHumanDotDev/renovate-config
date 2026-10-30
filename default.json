@@ -8,14 +8,14 @@
   "labels": ["dependencies"],
   "packageRules": [
     {
-      "description": "npm minor and patch updates arrive as one weekly PR; majors stay separate.",
-      "matchManagers": ["npm"],
+      "description": "npm package minor and patch updates (npm, pnpm, yarn or bun) arrive as one weekly PR; majors stay separate.",
+      "matchDatasources": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
       "groupName": "npm minor and patch"
     },
     {
       "description": "Payload's packages are released together and must match, so they move in their own PR.",
-      "matchManagers": ["npm"],
+      "matchDatasources": ["npm"],
       "matchPackageNames": ["payload", "@payloadcms/**"],
       "groupName": "payload"
     },
