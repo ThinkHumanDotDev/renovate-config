@@ -1,56 +1,91 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "description": "ThinkHuman's shared Renovate settings. Every repo's renovate.json extends this and adds only its own rules.",
-  "extends": ["config:recommended", ":dependencyDashboard", ":semanticCommitsDisabled"],
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommitsDisabled"
+  ],
   "timezone": "Europe/London",
-  "schedule": ["before 7am on monday"],
+  "schedule": [
+    "before 7am on monday"
+  ],
   "platformAutomerge": false,
-  "labels": ["dependencies"],
+  "labels": [
+    "dependencies"
+  ],
   "packageRules": [
     {
       "description": "npm package minor and patch updates (npm, pnpm, yarn or bun) arrive as one weekly PR; majors stay separate.",
-      "matchDatasources": ["npm"],
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchDatasources": [
+        "npm"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
       "groupName": "npm minor and patch"
     },
     {
       "description": "Payload's packages are released together and must match, so they move in their own PR.",
-      "matchDatasources": ["npm"],
-      "matchPackageNames": ["payload", "@payloadcms/**"],
+      "matchDatasources": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "payload",
+        "@payloadcms/**"
+      ],
       "groupName": "payload"
     },
     {
       "description": "Postgres majors come as their own PR and are never automerged: a major needs a dump and reload, not a tag bump.",
-      "matchDatasources": ["docker"],
-      "matchPackageNames": ["postgres"],
-      "matchUpdateTypes": ["major"],
+      "matchDatasources": [
+        "docker"
+      ],
+      "matchPackageNames": [
+        "postgres"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "automerge": false,
       "prBodyNotes": [
         "**Do not merge as is.** A Postgres major cannot read the old data directory: dump the database, move to the new major on a fresh volume, and restore."
       ]
     },
     {
-      "description": "Reusable workflows from ThinkHumanDotDev/infrastructure are pinned to a bare SHA, which the github-actions manager skips; the custom manager below tracks them.",
-      "matchManagers": ["github-actions"],
-      "matchPackageNames": ["ThinkHumanDotDev/infrastructure"],
+      "description": "Reusable workflows from ThinkHumanDotDev repos (infrastructure, .github) are pinned to a bare SHA, which the github-actions manager skips; the custom manager below tracks them.",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "matchPackageNames": [
+        "ThinkHumanDotDev/*"
+      ],
       "enabled": false
     },
     {
-      "description": "Every reference to the infrastructure reusable workflows moves to its latest main in one PR, reviewed by hand.",
-      "matchManagers": ["custom.regex"],
-      "matchPackageNames": ["ThinkHumanDotDev/infrastructure"],
-      "groupName": "infrastructure workflows",
+      "description": "Every pin on a ThinkHumanDotDev reusable workflow moves to that repo's latest main in one PR, reviewed by hand.",
+      "matchManagers": [
+        "custom.regex"
+      ],
+      "matchPackageNames": [
+        "ThinkHumanDotDev/*"
+      ],
+      "groupName": "ThinkHuman workflows",
       "automerge": false
     }
   ],
   "customManagers": [
     {
       "customType": "regex",
-      "description": "Reusable workflows from ThinkHumanDotDev/infrastructure, pinned to a full SHA; follow its main branch.",
-      "managerFilePatterns": ["/^\\.github/workflows/[^/]+\\.ya?ml$/"],
-      "matchStrings": ["uses: ThinkHumanDotDev/infrastructure/\\.github/workflows/[^@\\s]+@(?<currentDigest>[0-9a-f]{40})"],
-      "depNameTemplate": "ThinkHumanDotDev/infrastructure",
-      "packageNameTemplate": "https://github.com/ThinkHumanDotDev/infrastructure",
+      "description": "Reusable workflows from ThinkHumanDotDev repos, pinned to a full SHA; follow each repo's main branch.",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/[^/]+\\.ya?ml$/"
+      ],
+      "matchStrings": [
+        "uses: (?<depName>ThinkHumanDotDev/[A-Za-z0-9._-]+)/\\.github/workflows/[^@\\s]+@(?<currentDigest>[0-9a-f]{40})"
+      ],
+      "packageNameTemplate": "https://github.com/{{{depName}}}",
       "datasourceTemplate": "git-refs",
       "currentValueTemplate": "main"
     }
